@@ -37,10 +37,10 @@
 
 
 		var coordinates = 
-			[{ "x1": VTL-1, "x2": VTL-1, "y": VLM},
-			{ "x1": VTL, "x2": VTH, "y": VLM},
+			[{ "x1": VTL-1, "x2": VTL-1, "y": VLP},
 			{ "x1": VTL, "x2": VTH, "y": VLP},
-			{ "x1": VTH+1, "x2": VTH+1, "y": VLP}]
+			{ "x1": VTL, "x2": VTH, "y": VLM},
+			{ "x1": VTH+1, "x2": VTH+1, "y": VLM}]
 
 		var data = coordinates.slice()
 		var x1Data = function(d) {return d.x1}
@@ -59,17 +59,40 @@
 		    .range([VLP, VLM])
 		    .domain([VLM, VLP])
 
+		var graphingFunct1 = d3.svg.line()
+			.x(function(d) {return d.x1*20})
+			.y(function(d) {return d.y*20})
+			.interpolate("linear");
+
+		var graphingFunct2 = d3.svg.line()
+			.x(function(d) {return d.x2*20})
+			.y(function(d) {return d.y*20})
+			.interpolate("linear");
+
 		var svg = d3.select("body").append("svg")
 			.attr("width", 500)
 			.attr("height", 400)
 
-		svg.selectAll("path").data(data).enter()
-			.append("path")
-			.attr("x", function(d) {return x(x1Data(d))})
-			.attr("y", function(d) {return y(yData(d))})
+		var graphProper = svg.append("path")
+			.attr("d", graphingFunct1(coordinates))
+			.attr("stroke", "blue")
+			.attr("stroke-width", 2)
 			.attr("fill", "none")
-            .attr("stroke", "blue")
-            .attr("stroke-width", 3);
+
+		svg.append("path")
+			.attr("d", graphingFunct2(coordinates))
+			.attr("stroke", "red")
+			.attr("stroke-width", 2)
+			.attr("fill", "none")
+
+
+		// svg.selectAll("path").data(data).enter()
+		// 	.append("path")
+		// 	.attr("x", function(d) {return x(x1Data(d))})
+		// 	.attr("y", function(d) {return y(yData(d))})
+		// 	.attr("fill", "none")
+  //           .attr("stroke", "blue")
+  //           .attr("stroke-width", 3);
 	}
 
 	function inverting(obj) {
