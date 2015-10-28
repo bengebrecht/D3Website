@@ -5,6 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="description" content="EE 230, Electronics" />
+
 		
 		<title>EE 230 :  Topics</title>		
 
@@ -33,15 +34,7 @@
 		obj.VTH.value = VTH
 		obj.hyst.value = hyst
 
-		// var coordinates = 
-		// [[{ "x": VTL-1, "y": VLM},
-		// { "x": VTL, "y": VLM},
-		// { "x": VTL, "y": VLP},
-		// { "x": VTH+1, "y": VLP}],
-		// [{ "x": VTL-1, "y": VLM},
-		// { "x": VTH, "y": VLM},
-		// { "x": VTH, "y": VLP},
-		// { "x": VTH+1, "y": VLP}]];
+
 
 		var coordinates = 
 			[{ "x1": VTL-1, "x2": VTL-1, "y": VLM},
@@ -54,17 +47,6 @@
 		var x2Data = function(d) {return d.x2}
 		var yData = function(d) {return d.y}
 
-		// var line1 = 
-		// [{ "x": VTL-1, "y": VLM},
-		// { "x": VTL, "y": VLM},
-		// { "x": VTL, "y": VLP},
-		// { "x": VTH+1, "y": VLP}]
-
-		// var line2 =
-		// [{ "x": VTL-1, "y": VLM},
-		// { "x": VTH, "y": VLM},
-		// { "x": VTH, "y": VLP},
-		// { "x": VTH+1, "y": VLP}]
 
 
 		var x = d3.scale.linear()
@@ -88,77 +70,6 @@
 			.attr("fill", "none")
             .attr("stroke", "blue")
             .attr("stroke-width", 3);
-
-
-		// var line1 = d3.svg.line()
-		// 	.x(function(d, i) {
-		// 		return coordinates[0][i].x;
-		// 	})
-		// 	.y(function(d, i) {
-		// 		return coordinates[0][i].y;
-		// 	});
-
-		// var line2 = d3.svg.line()
-		// 	.x(function(d, i) {
-		// 		return coordinates[1][i].x;
-		// 	})
-		// 	.y(function(d, i) {
-		// 		return coordinates[1][i].y;
-		// 	});
-
-		// var svg = d3.select("body").append("svg")
-		// 	.attr("width", 300)
-		// 	.attr("height", 200);
-
-		// svg.selectAll("path").data(coordinates).enter()
-		//     .append("path")
-		//     .attr("x", function(d) { return x(line1x(d)) })
-		//     .attr("y", function(d) { return y(line1y(d)) }) 
-		//     .attr("fill", "none")
-  //           .attr("stroke", "blue")
-  //           .attr("stroke-width", 3);
-
-  //       var svg2 = svg.append("g")
-
-  //       svg2.selectAll("path").data(coordinates).enter()
-  //       	.append("path")
-		//     .attr("x", function(d) { return x(line2x(d)) })
-		//     .attr("y", function(d) { return y(line2y(d)) }) 
-		//     .attr("fill", "none")
-  //           .attr("stroke", "blue")
-  //           .attr("stroke-width", 3);
-
-
-		// var canvas = d3.select("body").append("svg")
-		// 	.attr("width", 300)
-		// 	.attr("height", 100)
-		// 	.attr("border", "black")
-
-		// var group = canvas.append("g")
-		// 	//.attr("transform", "translate(100, 10)")
-
-		// var line = d3.svg.line()
-		// 	.x(function(d, i) {
-		// 		return d.x;
-		// 	})
-		// 	.y(function(d, i) {
-		// 		return d.y;
-		// 	});
-
-		// group.selectAll("path")
-		// 	.data(coordinates).enter()
-		// 	.append("path")
-		// 	.attr("x")
-		// 	.attr("fill", "none")
-		// 	.attr("stroke", "green")
-		// 	.attr("stroke-width", 1);
-
-
-		// c = document.getElementById("nonCanvas")
-		// ctx = c.getContext("2d")
-		// ctx.moveTo(0,0)
-		// ctx.lineTo(200,100)
-		// ctx.stroke()
 	}
 
 	function inverting(obj) {
