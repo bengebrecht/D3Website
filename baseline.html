@@ -62,13 +62,10 @@ body { font: 12px Arial;}
 			{ "x1": VTL, "x2": VTH, "y": VLP},
 			{ "x1": VTH+1, "x2": VTH+1, "y": VLP}]
 
-		var data = coordinates.slice()
-		var x1Data = function(d) {return d.x1}
-		var x2Data = function(d) {return d.x2}
-		var yData = function(d) {return d.y}
+		var axes = 
+			[{"x1": VTL-1, "x2": 0, "y1": 0, "y2": VLP}, 
+			{"x1": VTH+1, "x2": 0, "y1": 0, "y2": VLM}]
 
-		var windowX = 500
-		var windowY = 400
 
 		// Set the dimensions of the canvas / graph
 		var margin = {top: 30, right: 20, bottom: 30, left: 50},
@@ -84,6 +81,9 @@ body { font: 12px Arial;}
 		var xAxis = d3.svg.axis().scale(x)
 		    .orient("bottom").ticks(5);
 
+		var xAxes = d3.svg.axis().scale(x)
+		    .orient("bottom").ticks(5);
+
 		var yAxis = d3.svg.axis().scale(y)
 		    .orient("left").ticks(5);
 
@@ -97,6 +97,14 @@ body { font: 12px Arial;}
 		var valueline2 = d3.svg.line()
 		    .x(function(d) { return x(d.x2); })
 		    .y(function(d) { return y(d.y); });
+
+		var xAxe = d3.svg.line()
+		    .x(x(axes.x1))
+		    .y(y(axes.y1));
+
+		var yAxe = d3.svg.line()
+		    .x(function(d) { return x(axes.x2); })
+		    .y(function(d) { return y(axes.y2); });
 		    
 		// Adds the svg canvas
 		var svg = d3.select("body")
@@ -130,7 +138,7 @@ body { font: 12px Arial;}
 	    // Add the X Axis
 	    svg.append("g")
 	        .attr("class", "x axis")
-	        .attr("transform", "translate(0," + height + ")")
+	        .attr("transform", "translate(0," + (height - (-VLM*(210/(VLP-VLM)))) + ")")
 	        .call(xAxis);
 
 	    // Add the Y Axis
@@ -138,7 +146,10 @@ body { font: 12px Arial;}
 	        .attr("class", "y axis")
 	        .call(yAxis);
 
-
+	    // Add the Y Axis
+	    svg.append("path")
+	        .attr("class", "y axis")
+	        .call(yAxis);
 
 		// var graphingFunct1 = d3.svg.line()
 		// 	.x(function(d) {return (d.x1*xScale)})
