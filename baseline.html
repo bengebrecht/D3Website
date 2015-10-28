@@ -9,15 +9,11 @@
 		
 		<title>EE 230 :  Topics</title>		
 
-		 <div id='d1' style="position:absolute; top:500px; left:1000px; z-index:1; border-width:1px">  
-			  	<canvas id="nonCanvas" width="300" height="100" style="position:absolute top:500px left:600px border:1px solid #d3d3d3;">
-		Your browser does not support the HTML5 canvas tag.</canvas>
-		</div>
+		 <div id="d1" style="position:absolute; top:200px; left:500px; z-index:1; border-width:1px;"></div>
+		 <div id="d2" style="position:absolute; top:1200px; left:500px; z-index:1; border-width:1px;"></div>
 	</head>
 
 	<style> /* set the CSS */
-
-body { font: 12px Arial;}
 
 /*path { 
     stroke: steelblue;
@@ -32,6 +28,17 @@ body { font: 12px Arial;}
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
+
+foo {
+	position:absolute; 
+	top:500px; 
+	left:1000px; 
+	z-index:1; 
+	border-width:1px; 
+	width:600px; 
+	height:270px;
+}
+
 
 </style>
 
@@ -62,6 +69,7 @@ body { font: 12px Arial;}
 			{ "x1": VTL, "x2": VTH, "y": VLP},
 			{ "x1": VTH+1, "x2": VTH+1, "y": VLP}]
 
+		//Let me axe you a question...
 		var axes = 
 			[{"x1": VTL-1, "x2": 0, "y1": 0, "y2": VLP}, 
 			{"x1": VTH+1, "x2": 0, "y1": 0, "y2": VLM}]
@@ -79,9 +87,6 @@ body { font: 12px Arial;}
 
 		// Define the axes
 		var xAxis = d3.svg.axis().scale(x)
-		    .orient("bottom").ticks(5);
-
-		var xAxes = d3.svg.axis().scale(x)
 		    .orient("bottom").ticks(5);
 
 		var yAxis = d3.svg.axis().scale(y)
@@ -107,7 +112,7 @@ body { font: 12px Arial;}
 		    .y(function(d) { return y(axes.y2); });
 		    
 		// Adds the svg canvas
-		var svg = d3.select("body")
+		var svg = d3.select("#d1")
 		    .append("svg")
 		        .attr("width", width + margin.left + margin.right)
 		        .attr("height", height + margin.top + margin.bottom)
@@ -146,45 +151,6 @@ body { font: 12px Arial;}
 	        .attr("class", "y axis")
 	        .call(yAxis);
 
-	    // Add the Y Axis
-	    svg.append("path")
-	        .attr("class", "y axis")
-	        .call(yAxis);
-
-		// var graphingFunct1 = d3.svg.line()
-		// 	.x(function(d) {return (d.x1*xScale)})
-		// 	.y(function(d) {return (d.y*yScale)})
-		// 	.interpolate("linear");
-
-		// var graphingFunct2 = d3.svg.line()
-		// 	.x(function(d) {return (d.x2*xScale)})
-		// 	.y(function(d) {return (d.y*yScale)})
-		// 	.interpolate("linear");
-
-		// var svg = d3.select("body").append("svg")
-		// 	.attr("width", windowX)
-		// 	.attr("height", windowY)
-
-		// var graphProper = svg.append("path")
-		// 	.attr("d", graphingFunct1(coordinates))
-		// 	.attr("stroke", "blue")
-		// 	.attr("stroke-width", 1)
-		// 	.attr("fill", "none")
-
-		// svg.append("path")
-		// 	.attr("d", graphingFunct2(coordinates))
-		// 	.attr("stroke", "red")
-		// 	.attr("stroke-width", 1)
-		// 	.attr("fill", "none")
-
-
-		// svg.selectAll("path").data(data).enter()
-		// 	.append("path")
-		// 	.attr("x", function(d) {return x(x1Data(d))})
-		// 	.attr("y", function(d) {return y(yData(d))})
-		// 	.attr("fill", "none")
-  //           .attr("stroke", "blue")
-  //           .attr("stroke-width", 3);
 	}
 
 	function inverting(obj) {
