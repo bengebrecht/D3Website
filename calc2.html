@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="EE 230, Electronics" />
+		<link href="http://tuttle.merc.iastate.edu/ee230/ee230styles.css" type="text/css" rel="stylesheet" />
+		
+		<title>EE 230 :  Topics</title>		
+
+		 <div id='d1' style="position:absolute; top:500px; left:1000px; z-index:1; border-width:1px">  
+			  	<canvas id="nonCanvas" width="300" height="100" style="position:absolute top:500px left:600px border:1px solid #d3d3d3;">
+		Your browser does not support the HTML5 canvas tag.</canvas>
+		</div>
+	</head>
+
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js" type="text/javascript"></script>
+
+	<script language="javascript"> 
+		function toggle(divNumber)
+		{
+			var ele = document.getElementById("toggleText"+divNumber);
+			if (ele.style.display == "block")
+				ele.style.display = "none";
+			else
+				ele.style.display = "block";
+		} 
+	</script>
+
+	<script Language = "JavaScript">
+	function noninverting(obj) {
+
+		Ra = parseFloat(obj.Ra.value)
+		Rb = parseFloat(obj.Rb.value)
+		VREF = parseFloat(obj.VREF.value)
+		VLP = parseFloat(obj.VLP.value)
+		VLM = parseFloat(obj.VLM.value)
+
+		VTL = VREF * (1 + Ra / Rb) - Ra / Rb * VLP
+		VTH = VREF * (1 + Ra / Rb) - Ra / Rb * VLM
+		hyst = VTH - VTL
+
+		obj.VTL.value = VTL
+		obj.VTH.value = VTH
+		obj.hyst.value = hyst
+
+		// var coordinates = 
+		// [[{ "x": VTL-1, "y": VLM},
+		// { "x": VTL, "y": VLM},
+		// { "x": VTL, "y": VLP},
+		// { "x": VTH+1, "y": VLP}],
+		// [{ "x": VTL-1, "y": VLM},
+		// { "x": VTH, "y": VLM},
+		// { "x": VTH, "y": VLP},
+		// { "x": VTH+1, "y": VLP}]];
+
+		var line1 = 
+		[{ "x": VTL-1, "y": VLM},
+		{ "x": VTL, "y": VLM},
+		{ "x": VTL, "y": VLP},
+		{ "x": VTH+1, "y": VLP}]
+
+		var line2 =
+		[{ "x": VTL-1, "y": VLM},
+		{ "x": VTH, "y": VLM},
+		{ "x": VTH, "y": VLP},
+		{ "x": VTH+1, "y": VLP}]
+
+		var line1x = line1.x;
+		var line1y = line1.y;
+
+		var line2x = line2.x;
+		var line2y = line2.y;
+
+		var x = d3.scale.linear()
+			.range([VTL-1, VTH+1])
+		    .domain([VTL-1, VTH+1])
+
+		//Odd D3 "intended feature" means y range is defined biggest to smallest
+		//while y domain is smallest to largest 
+		var y = d3.scale.linear()
+		    .range([VLP, VLM])
+		    .domain([VLM, VLP])
+
+
+
+		// var line1 = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return coordinates[0][i].x;
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return coordinates[0][i].y;
+		// 	});
+
+		// var line2 = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return coordinates[1][i].x;
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return coordinates[1][i].y;
+		// 	});
+
+		var svg = d3.select("body").append("svg")
+			.attr("width", 300)
+			.attr("height", 200);
+
+		svg.selectAll("path").data(coordinates).enter()
+		    .append("path")
+		    .attr("x", function(d) { return x(line1x(d)) })
+		    .attr("y", function(d) { return y(line1y(d)) }) 
+		    .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 3);
+
+        var svg2 = svg.append("g")
+
+        svg2.selectAll("path").data(coordinates).enter()
+        	.append("path")
+		    .attr("x", function(d) { return x(line2x(d)) })
+		    .attr("y", function(d) { return y(line2y(d)) }) 
+		    .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 3);
+
+
+		// var canvas = d3.select("body").append("svg")
+		// 	.attr("width", 300)
+		// 	.attr("height", 100)
+		// 	.attr("border", "black")
+
+		// var group = canvas.append("g")
+		// 	//.attr("transform", "translate(100, 10)")
+
+		// var line = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return d.x;
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return d.y;
+		// 	});
+
+		// group.selectAll("path")
+		// 	.data(coordinates).enter()
+		// 	.append("path")
+		// 	.attr("x")
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", "green")
+		// 	.attr("stroke-width", 1);
+
+
+		// c = document.getElementById("nonCanvas")
+		// ctx = c.getContext("2d")
+		// ctx.moveTo(0,0)
+		// ctx.lineTo(200,100)
+		// ctx.stroke()
+	}
+
+	function inverting(obj) {
+
+	Ra = parseFloat(obj.Ra.value)
+	Rb = parseFloat(obj.Rb.value)
+	VREF = parseFloat(obj.VREF.value)
+	VLP = parseFloat(obj.VLP.value)
+	VLM = parseFloat(obj.VLM.value)
+
+	VTL = (VREF + Ra / Rb * VLM) / (1 + Ra / Rb)
+	VTH = (VREF + Ra / Rb * VLP) / (1 + Ra / Rb)
+	hyst = VTH - VTL
+
+	obj.VTL.value = VTL
+	obj.VTH.value = VTH
+	obj.hyst.value = hyst
+
+	}
+	</script>
+	
+	<body>
+
+
+
+
+		<header class="titlebar">
+			<script src="http://tuttle.merc.iastate.edu/ee230/titlebar.js"></script>
+		</header>
+		<nav class="navbar">
+			<script src="http://tuttle.merc.iastate.edu/ee230/navbar.js"></script>
+		</nav>
+
+  		<article class="content">
+
+			<h2>Comparator Calculators</h2>	
+
+			<h3>Non-Inverting</h3>
+
+			<img src= "noninverting.png">
+
+			<form name="noninv">
+				<table border="0">
+					<tr>
+						<td>Ra: </td>
+						<td><input type=text size = "7" name="Ra">k&#8486</td>
+						<td>VTL: </td>
+						<td><input type=text size = "7" name="VTL">V</td>
+					</tr><tr>
+						<td>Rb: </td>
+						<td><input type=text size = "7" name="Rb">k&#8486<br></td>
+						<td>VTH: </td>
+						<td><input type=text size = "7" name="VTH">V</td>
+					</tr><tr>
+						<td>VREF: </td>
+						<td><input type=text size = "7" name="VREF">V</td>
+						<td>Hysteresis: </td>
+						<td><input type=text size = "7" name="hyst">V</td>
+					</tr><tr>
+						<td>VL+: </td>
+						<td><input type=text size = "7" name="VLP">V</td>
+					</tr><tr>
+						<td>VL-: </td>
+						<td><input type=text size = "7" name="VLM">V</td>
+					</tr>
+				</table>
+			<br><input type="button" value="Calculate" onClick="noninverting(this.form)"><br><br>
+			</form>
+
+			<h3>Inverting</h3>
+
+			<img src= "inverting.png">
+
+			<form name="inv">
+				<table border="0">
+					<tr>
+						<td>Ra: </td>
+						<td><input type=text size = "7" name="Ra">k&#8486</td>
+						<td>VTL: </td>
+						<td><input type=text size = "7" name="VTL">V</td>
+					</tr><tr>
+						<td>Rb: </td>
+						<td><input type=text size = "7" name="Rb">k&#8486<br></td>
+						<td>VTH: </td>
+						<td><input type=text size = "7" name="VTH">V</td>
+					</tr><tr>
+						<td>VREF: </td>
+						<td><input type=text size = "7" name="VREF">V</td>
+						<td>Hysteresis: </td>
+						<td><input type=text size = "7" name="hyst">V</td>
+					</tr><tr>
+						<td>VL+: </td>
+						<td><input type=text size = "7" name="VLP">V</td>
+					</tr><tr>
+						<td>VL-: </td>
+						<td><input type=text size = "7" name="VLM">V</td>
+					</tr>
+				</table>
+			<br><input type="button" value="Calculate" onClick="inverting(this.form)">
+			</form>		
+
+		
+											
+			</article>
+
+
+		<div class="footer">
+			<span class="leftfooter">
+				This page last modified on
+					 Wednesday October 21, 2015
+			</span>
+			<span class="rightfooter">
+				&copy; 2015 <a href="mailto:gtuttle@iastate.edu">Gary Tuttle
+			</span>
+		</div>	  
+		
+	</body>
+</html>
