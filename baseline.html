@@ -51,17 +51,92 @@
 		obj.VTH.value = VTH
 		obj.hyst.value = hyst
 
-		update(VLP, VLM, VTL, VTH, "#d1");
-
-	}
-
-
-	function update(VLP, VLM, VTL, VTH, div) {
 		var coordinates = 
 			[{ "x1": VTL-1, "x2": VTL-1, "y": VLM},
 			{ "x1": VTL, "x2": VTH, "y": VLM},
 			{ "x1": VTL, "x2": VTH, "y": VLP},
 			{ "x1": VTH+1, "x2": VTH+1, "y": VLP}]
+
+		update(VLP, VLM, VTL, VTH, "#d1", coordinates);
+
+	}
+
+	function inverting(obj) {
+
+	Ra = parseFloat(obj.Ra.value)
+	Rb = parseFloat(obj.Rb.value)
+	VREF = parseFloat(obj.VREF.value)
+	VLP = parseFloat(obj.VLP.value)
+	VLM = parseFloat(obj.VLM.value)
+
+	VTL = (VREF + Ra / Rb * VLM) / (1 + Ra / Rb)
+	VTH = (VREF + Ra / Rb * VLP) / (1 + Ra / Rb)
+	hyst = VTH - VTL
+
+	obj.VTL.value = VTL
+	obj.VTH.value = VTH
+	obj.hyst.value = hyst
+
+	var coordinates = 
+		[{ "x1": VTH+1, "x2": VTH+1, "y": VLM},
+		{ "x1": VTL, "x2": VTH, "y": VLM},
+		{ "x1": VTL, "x2": VTH, "y": VLP},
+		{ "x1": VTL-1, "x2": VTL-1, "y": VLP}]
+
+	update(VLP, VLM, VTL, VTH, "#d2", coordinates)
+
+	}
+
+	function osc1(obj) {
+
+	Ra = parseFloat(obj.Ra.value)
+	Rb = parseFloat(obj.Rb.value)
+	VREF = parseFloat(obj.VREF.value)
+	VLP = parseFloat(obj.VLP.value)
+	VLM = parseFloat(obj.VLM.value)
+	R = parseFloat(obj.R.value)
+	C = parseFloat(obj.C.value)
+
+	VTL = (VREF + Ra / Rb * VLM) / (1 + Ra / Rb)
+	VTH = (VREF + Ra / Rb * VLP) / (1 + Ra / Rb)
+	TH = R * C * Math.log((VLP - VTL)/(VLP - VTH))
+	TL = R * C * Math.log((VLM - VTH)/(VLM - VTL))
+	F = 1000 / (TH + TL)
+
+	obj.VTL.value = VTL
+	obj.VTH.value = VTH
+	obj.TH.value = TH
+	obj.TL.value = TL
+	obj.F.value = F
+
+	}
+
+
+	function osc2(obj) {
+
+	Ra = parseFloat(obj.Ra.value)
+	Rb = parseFloat(obj.Rb.value)
+	VLP = parseFloat(obj.VLP.value)
+	VLM = parseFloat(obj.VLM.value)
+	R = parseFloat(obj.R.value)
+	C = parseFloat(obj.C.value)
+
+	VTL = -Ra / Rb * VLP
+	VTH = -Ra / Rb * VLM
+	TH = R * C * (VTH-VTL) / VLP
+	TL = R * C * (VTH-VTL) / -VLM
+	F = 1000 / (TH + TL)
+
+	obj.VTL.value = VTL
+	obj.VTH.value = VTH
+	obj.TH.value = TH
+	obj.TL.value = TL
+	obj.F.value = F
+
+	}
+
+
+	function update(VLP, VLM, VTL, VTH, div, coordinates) {
 
 				// Set the dimensions of the canvas / graph
 		var margin = {top: 30, right: 20, bottom: 30, left: 50},
@@ -216,26 +291,6 @@
 
 	}
 
-	function inverting(obj) {
-
-	Ra = parseFloat(obj.Ra.value)
-	Rb = parseFloat(obj.Rb.value)
-	VREF = parseFloat(obj.VREF.value)
-	VLP = parseFloat(obj.VLP.value)
-	VLM = parseFloat(obj.VLM.value)
-
-	VTL = (VREF + Ra / Rb * VLM) / (1 + Ra / Rb)
-	VTH = (VREF + Ra / Rb * VLP) / (1 + Ra / Rb)
-	hyst = VTH - VTL
-
-	obj.VTL.value = VTL
-	obj.VTH.value = VTH
-	obj.hyst.value = hyst
-
-	update(VLP, VLM, VTL, VTH, "#d2")
-
-	}
-
 	window.onload=init("#d1")
 	window.onload=init("#d2")
 	</script>
@@ -309,9 +364,84 @@
 			<br><input type="button" value="Calculate" onClick="inverting(this.form)">
 			</form>		
 
-		
-											
+			<h3>Oscillators</h3>
 
+			<img src= "osc1.png">
+
+			<form name="oscillator1">
+				<table border="0">
+					<tr>
+						<td>Ra: </td>
+						<td><input type=text size = "7" name="Ra">k&#8486</td>
+						<td>VTL: </td>
+						<td><input type=text size = "7" name="VTL">V</td>
+					</tr><tr>
+						<td>Rb: </td>
+						<td><input type=text size = "7" name="Rb">k&#8486<br></td>
+						<td>VTH: </td>
+						<td><input type=text size = "7" name="VTH">V</td>
+					</tr><tr>
+						<td>VREF: </td>
+						<td><input type=text size = "7" name="VREF">V</td>
+						<td>TH: </td>
+						<td><input type=text size = "7" name="TH">ms</td>
+					</tr><tr>
+						<td>VL+: </td>
+						<td><input type=text size = "7" name="VLP">V</td>
+						<td>TL: </td>
+						<td><input type=text size = "7" name="TL">ms</td>
+					</tr><tr>
+						<td>VL-: </td>
+						<td><input type=text size = "7" name="VLM">V</td>
+						<td>F: </td>
+						<td><input type=text size = "7" name="F">Hz</td>
+					</tr><tr>
+						<td>R: </td>
+						<td><input type=text size = "7" name="R">k&#8486</td>
+					</tr><tr>
+						<td>C: </td>
+						<td><input type=text size = "7" name="C">&#181F</td>
+					</tr>
+				</table>
+			<br><input type="button" value="Calculate" onClick="osc1(this.form)">
+			</form>	
+											
+			<img src= "osc2.png">
+
+			<form name="oscillator2">
+				<table border="0">
+					<tr>
+						<td>Ra: </td>
+						<td><input type=text size = "7" name="Ra">k&#8486</td>
+						<td>VTL: </td>
+						<td><input type=text size = "7" name="VTL">V</td>
+					</tr><tr>
+						<td>Rb: </td>
+						<td><input type=text size = "7" name="Rb">k&#8486<br></td>
+						<td>VTH: </td>
+						<td><input type=text size = "7" name="VTH">V</td>
+					</tr><tr>
+						<td>VL+: </td>
+						<td><input type=text size = "7" name="VLP">V</td>
+						<td>TH: </td>
+						<td><input type=text size = "7" name="TH">ms</td>
+					</tr><tr>
+						<td>VL-: </td>
+						<td><input type=text size = "7" name="VLM">V</td>
+						<td>TL: </td>
+						<td><input type=text size = "7" name="TL">ms</td>
+					</tr><tr>
+						<td>R: </td>
+						<td><input type=text size = "7" name="R">k&#8486</td>
+						<td>F: </td>
+						<td><input type=text size = "7" name="F">Hz</td>
+					</tr><tr>
+						<td>C: </td>
+						<td><input type=text size = "7" name="C">&#181F</td>
+					</tr>
+				</table>
+			<br><input type="button" value="Calculate" onClick="osc2(this.form)">
+			</form>
 
 
  
